@@ -1,25 +1,24 @@
-#Alexa Tests
-
+import json
+import requests
 import logging
 from random import randint
 from flask import Flask, render_template
 from flask_ask import Ask, statement, question, session
-import json
-import requests
-
 
 app = Flask(__name__)
 ask = Ask(app, "/")
 logging.getLogger("flask_ask").setLevel(logging.DEBUG)
 
-@ask.intent("CurrencyValue")
+@ask.launch
+def new_query():
+    return question("Etherium right?")
 
-def new_crypto_query():
-
-    ethvalue = 288.79
-
-    return statement(ethvalue)
+@ask.intent("YesIntent")
+def next_round():
+    r = requests.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
+    data = json.loads(r.text)
+    value = "One Etherium is currently valued at " + str(data['USD']) + " US Dollars"
+    return statement(value)
 
 if __name__ == '__main__':
-
     app.run(debug=True)
