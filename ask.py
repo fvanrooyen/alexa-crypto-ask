@@ -31,5 +31,7 @@ def crypto_price(ctype):
   
     return statement(value)
 
+#Add Miner Checks Here
+
 if __name__ == '__main__':
     app.run(debug=True)
